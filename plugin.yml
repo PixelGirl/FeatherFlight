@@ -1,0 +1,23 @@
+name: FeatherFlight
+main: me.joriseend.featherflight.FeatherFlight
+version: 1.4.2
+description: Flight with luxury feathers
+
+author: joriseend
+
+commands:
+    fly:
+      description: Enables/Disables flight
+      usage: /<command> OR /<command> <player>
+permissions:
+    featherflight.*:
+        description: Gives access to complete flight
+        children:
+            featherflight.fly: true
+            featherflight.fly.others: true
+    featherflight.fly:
+        description: Allows the player to fly
+        default: op
+    featherflight.fly.others:
+        description: Allows the player to change other players' flight
+        default: op
