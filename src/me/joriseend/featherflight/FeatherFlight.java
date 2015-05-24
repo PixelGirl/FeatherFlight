@@ -22,9 +22,12 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 	String ConsoleDenied = "Such console, so denied. Wow.";
 	String Enabled = FeatherFlightConsolePrefix + Name + " is now levitating!";
 	String Disabled = FeatherFlightConsolePrefix + Name + " is now slowly sinking to the ground.";
-	String FlightOnSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned on.";
-	String FlightOffSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned off.";
+	String FlightOnSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned on";
+	String FlightOffSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned off";
+	String FlightChangeSuccess = FeatherFlightPrefix + ChatColor.GREEN + "You flight has been changed";
 	String TooManyArgs = FeatherFlightPrefix + ChatColor.RED + "Too many arguments! Please specify 1 player at the time!";
+	String FlyPermission = "featherflight.fly";
+	String FlyPermissionOthers = "featherflight.fly.others";
 	public String ConfigArgs = ".Flying";
 	String ConfigNameArg = ".username";
 	boolean Flying = false;
@@ -41,7 +44,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 			if((sender instanceof Player)){
 				Player player = (Player) sender;
 				if(args.length == 0){
-					if(player.hasPermission("featherflight.fly")){
+					if(player.hasPermission(FlyPermission)){
 						if(getConfig().getBoolean(player.getUniqueId().toString() + ConfigArgs) == false){
 							getConfig().set(player.getUniqueId().toString() + ConfigArgs, true);
 							getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
@@ -68,7 +71,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 					}
 				}else if (args.length == 1){
 					if(args[0] == "true"){
-						if(player.hasPermission("featherflight.fly")){
+						if(player.hasPermission(FlyPermission)){
 							getConfig().set(player.getUniqueId().toString() + ConfigArgs, true);
 							getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 							saveConfig();
@@ -79,8 +82,8 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 							player.sendMessage(NoPermission);
 						}
 					}else if(args[0] == "false"){
-						if(player.hasPermission("featherflight.fly")){
-							getConfig().set(player.getUniqueId().toString() + ConfigArgs, true);
+						if(player.hasPermission(FlyPermission)){
+							getConfig().set(player.getUniqueId().toString() + ConfigArgs, false);
 							getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 							saveConfig();
 							player.setAllowFlight(false);
@@ -95,10 +98,11 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 							player.sendMessage(OnlinePlayerFindPrefix + CannotFindPlayer + " " + ChatColor.GRAY + args[0]);
 							return true;
 						}else{
-							if(player.hasPermission("featherflight.fly.others")){
+							if(player.hasPermission(FlyPermissionOthers)){
 								if(getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs) == false){
 									getConfig().set(target.getUniqueId().toString() + ConfigArgs, true);
 									getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
+									getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 									saveConfig();
 									target.setAllowFlight(true);
 									target.setFlying(true);
@@ -108,6 +112,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 								}else if(getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs) == true){
 									getConfig().set(target.getUniqueId().toString() + ConfigArgs, false);
 									getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
+									getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 									saveConfig();
 									target.setAllowFlight(false);
 									target.setFlying(false);
@@ -125,8 +130,37 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 						}
 					}
 				}else if(args.length == 2){
-					if(args[1] == "true"){
-						
+					Player target = Bukkit.getPlayer(args[0]);
+					if(target == null){
+						player.sendMessage(OnlinePlayerFindPrefix + CannotFindPlayer + " " + ChatColor.GRAY + args[0]);
+						return true;
+					}else{
+						if(player.hasPermission(FlyPermissionOthers)){
+							if(args[1] == "true"){
+								getConfig().set(target.getUniqueId().toString() + ConfigArgs, true);
+								getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
+								getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
+								saveConfig();
+								target.setAllowFlight(true);
+								target.setFlying(true);
+								target.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
+								player.sendMessage(FlightChangeSuccess);
+								return true;
+							}else if(args[1] == "false"){
+								getConfig().set(target.getUniqueId().toString() + ConfigArgs, false);
+								getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
+								getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
+								saveConfig();
+								target.setAllowFlight(false);
+								target.setFlying(false);
+								target.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
+								player.sendMessage(FlightChangeSuccess);
+								return true;
+							}
+						}else{
+							player.sendMessage(NoPermission);
+							return true;
+						}
 					}
 				}else if(args.length > 2){
 					player.sendMessage(TooManyArgs);
