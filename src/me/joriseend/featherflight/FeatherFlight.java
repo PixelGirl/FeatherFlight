@@ -143,8 +143,8 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 								saveConfig();
 								target.setAllowFlight(true);
 								target.setFlying(true);
-								target.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
-								player.sendMessage(FlightChangeSuccess);
+								target.sendMessage(FlightChangeSuccess);
+								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
 								return true;
 							}else if(args[1] == "false"){
 								getConfig().set(target.getUniqueId().toString() + ConfigArgs, false);
@@ -153,8 +153,8 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 								saveConfig();
 								target.setAllowFlight(false);
 								target.setFlying(false);
-								target.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
-								player.sendMessage(FlightChangeSuccess);
+								target.sendMessage(FlightChangeSuccess);
+								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
 								return true;
 							}
 						}else{
