@@ -24,7 +24,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 	String Disabled = FeatherFlightConsolePrefix + Name + " is now slowly sinking to the ground.";
 	String FlightOnSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned on";
 	String FlightOffSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned off";
-	String FlightChangeSuccess = FeatherFlightPrefix + ChatColor.GREEN + "You flight has been changed";
+	String FlightChangeSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Your flight has been changed";
 	String TooManyArgs = FeatherFlightPrefix + ChatColor.RED + "Too many arguments! Please specify 1 player at the time!";
 	String FlyPermission = "featherflight.fly";
 	String FlyPermissionOthers = "featherflight.fly.others";
@@ -70,42 +70,99 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 						return true;
 					}
 				}else if (args.length == 1){
+					if(args[0] == "true"){
+						if(player.hasPermission(FlyPermission)){
+							getConfig().set(player.getUniqueId().toString() + ConfigArgs, true);
+							getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
+							saveConfig();
+							player.setAllowFlight(true);
+							player.setFlying(true);
+							player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + player.getDisplayName() +  ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(player.getUniqueId().toString() + ConfigArgs));
+						}else{
+							player.sendMessage(NoPermission);
+						}
+					}else if(args[0] == "false"){
+						if(player.hasPermission(FlyPermission)){
+							getConfig().set(player.getUniqueId().toString() + ConfigArgs, false);
+							getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
+							saveConfig();
+							player.setAllowFlight(false);
+							player.setFlying(false);
+							player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + player.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(player.getUniqueId().toString() + ConfigArgs));
+						}else{
+							player.sendMessage(NoPermission);
+						}
+					}else{
+						Player target = Bukkit.getPlayer(args[0]);
+						if(target == null){
+							player.sendMessage(OnlinePlayerFindPrefix + CannotFindPlayer + " " + ChatColor.GRAY + args[0]);
+							return true;
+						}else{
+							if(player.hasPermission(FlyPermissionOthers)){
+								if(getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs) == false){
+									getConfig().set(target.getUniqueId().toString() + ConfigArgs, true);
+									getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
+									getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
+									saveConfig();
+									target.setAllowFlight(true);
+									target.setFlying(true);
+									target.sendMessage(FeatherFlightPrefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.RESET + ChatColor.GREEN + " " + "turned on your flight" + ChatColor.RESET);
+									player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "You turned on flight for" + " " + ChatColor.RESET + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET);
+									return true;
+								}else if(getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs) == true){
+									getConfig().set(target.getUniqueId().toString() + ConfigArgs, false);
+									getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
+									getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
+									saveConfig();
+									target.setAllowFlight(false);
+									target.setFlying(false);
+									target.sendMessage(FeatherFlightPrefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.RESET + ChatColor.GREEN + " " + "turned off your flight" + ChatColor.RESET);
+									player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "You turned off flight for" + " " + ChatColor.RESET + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET);
+									return true;
+								}else{
+									player.sendMessage(FeatherFlightPrefix + error);
+									return false;
+								}
+							}else{
+								player.sendMessage(NoPermission);
+								return true;
+							}
+						}
+					}
+				}else if(args.length == 2){
 					Player target = Bukkit.getPlayer(args[0]);
 					if(target == null){
 						player.sendMessage(OnlinePlayerFindPrefix + CannotFindPlayer + " " + ChatColor.GRAY + args[0]);
 						return true;
 					}else{
 						if(player.hasPermission(FlyPermissionOthers)){
-							if(getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs) == false){
+							if(args[1] == "true"){
 								getConfig().set(target.getUniqueId().toString() + ConfigArgs, true);
 								getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
 								getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 								saveConfig();
 								target.setAllowFlight(true);
 								target.setFlying(true);
-								target.sendMessage(FeatherFlightPrefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.RESET + ChatColor.GREEN + " " + "turned on your flight" + ChatColor.RESET);
-								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "You turned on flight for" + " " + ChatColor.RESET + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET);
+								target.sendMessage(FlightChangeSuccess);
+								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
 								return true;
-							}else if(getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs) == true){
+							}else if(args[1] == "false"){
 								getConfig().set(target.getUniqueId().toString() + ConfigArgs, false);
 								getConfig().set(target.getUniqueId().toString() + ConfigNameArg, target.getDisplayName());
 								getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 								saveConfig();
 								target.setAllowFlight(false);
 								target.setFlying(false);
-								target.sendMessage(FeatherFlightPrefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.RESET + ChatColor.GREEN + " " + "turned off your flight" + ChatColor.RESET);
-								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "You turned off flight for" + " " + ChatColor.RESET + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET);
+								target.sendMessage(FlightChangeSuccess);
+								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Flight of" + ChatColor.RESET + " " + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET + " " + ChatColor.GREEN + "=" + ChatColor.RESET + " " + ChatColor.YELLOW + getConfig().getBoolean(target.getUniqueId().toString() + ConfigArgs));
 								return true;
-							}else{
-								player.sendMessage(FeatherFlightPrefix + error);
-								return false;
 							}
 						}else{
 							player.sendMessage(NoPermission);
 							return true;
 						}
 					}
-				}else if(args.length > 1){
+				}else if(args.length > 2){
 					player.sendMessage(TooManyArgs);
 					return true;
 				}else{
@@ -151,8 +208,8 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 	@EventHandler
 	public void onLogin(PlayerJoinEvent e){
 		Player player = e.getPlayer();
+		getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 		if(getConfig().getBoolean(player.getUniqueId().toString() + ConfigArgs) == true){
-			getConfig().set(player.getUniqueId().toString() + ConfigNameArg, player.getDisplayName());
 			player.setAllowFlight(true);
 			player.setFlying(true);
 		}
