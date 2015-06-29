@@ -24,7 +24,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 	String Disabled = FeatherFlightConsolePrefix + Name + " is now slowly sinking to the ground.";
 	String FlightOnSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned on";
 	String FlightOffSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned off";
-	String FlightChangeSuccess = FeatherFlightPrefix + ChatColor.GREEN + "You flight has been changed";
+	String FlightChangeSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Your flight has been changed";
 	String TooManyArgs = FeatherFlightPrefix + ChatColor.RED + "Too many arguments! Please specify 1 player at the time!";
 	String FlyPermission = "featherflight.fly";
 	String FlyPermissionOthers = "featherflight.fly.others";
@@ -172,6 +172,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 			}else{
 				if(args.length == 0){
 					sender.sendMessage(ConsoleDenied);
+					return true;
 				}else if(args.length == 1){
 					Player target = Bukkit.getPlayer(args[0]);
 					if(target == null){
