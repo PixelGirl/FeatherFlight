@@ -6,3 +6,4 @@ The development branch is where new implementations will be commited and tested,
 Use the master branch for a stable release.
 
 FeatherFlight plugin by Joris
+Currently maintained by Pixel
