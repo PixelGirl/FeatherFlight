@@ -1,14 +1,15 @@
 name: FeatherFlight
-main: me.joriseend.featherflight.FeatherFlight
-version: 1.4.5
+main: me.jorislight.featherflight.FeatherFlight
+version: 1.5
 description: Flight with luxury feathers
 
-author: joriseend
+author: Joris
 
 commands:
     fly:
       description: Enables/Disables flight
-      usage: /<command> OR /<command> <player>
+      usage: /<command> [player]
+      aliases: [f, flight]
 permissions:
     featherflight.*:
         description: Gives access to complete flight
