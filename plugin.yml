@@ -3,7 +3,7 @@ main: me.jorislight.featherflight.FeatherFlight
 version: 1.5
 description: Flight with luxury feathers
 
-author: Joris
+author: Pixel
 
 commands:
     fly:
