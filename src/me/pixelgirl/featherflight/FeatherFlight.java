@@ -1,4 +1,4 @@
-package me.jorislight.featherflight;
+package me.pixelgirl.featherflight;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,13 +26,12 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 	String Disabled = FeatherFlightConsolePrefix + Name + " is now slowly sinking to the ground.";
 	String FlightOnSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned on";
 	String FlightOffSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Flight is now turned off";
-	String FlightChangeSuccess = FeatherFlightPrefix + ChatColor.GREEN + "Your flight has been changed";
 	String TooManyArgs = FeatherFlightPrefix + ChatColor.RED + "Too many arguments! Please specify 1 player at the time!";
 	String FlyPermission = "featherflight.fly";
 	String FlyPermissionOthers = "featherflight.fly.others";
-	public String ConfigArgs = ".Flying";
+    String ConfigArgs = ".Flying";
 	String ConfigNameArg = ".username";
-    HashMap<UUID, Boolean> Flying = new HashMap<>();
+    HashMap<UUID, Boolean> Flying = new HashMap<UUID, Boolean>();
 
 	public void onEnable(){
 		getServer().getPluginManager().registerEvents(this, this);
@@ -54,23 +53,19 @@ public class FeatherFlight extends JavaPlugin implements Listener{
                             player.setAllowFlight(true);
                             player.setFlying(true);
                             world.playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, 1000);
-                            world.playSound(player.getLocation(), Sound.LEVEL_UP, 100f, 100f);
+                            world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
                             player.sendMessage(FlightOnSuccess);
                             return true;
-                        } else if (player.getAllowFlight()){
+                        } else{
                             Flying.put(player.getUniqueId(), false);
                             player.setAllowFlight(false);
                             player.setFlying(false);
                             world.playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, 1000);
-                            world.playSound(player.getLocation(), Sound.LEVEL_UP, 100f, 100f);
+                            world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
                             player.sendMessage(FlightOffSuccess);
                             return true;
-                        } else {
-                            player.sendMessage(FeatherFlightPrefix + error);
-                            return false;
                         }
-                    }
-                    else{
+                    }else{
 						player.sendMessage(NoPermission);
 						return true;
 					}
@@ -87,8 +82,8 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 								target.setAllowFlight(true);
 								target.setFlying(true);
                                 tworld.playEffect(target.getLocation(), Effect.EXPLOSION_LARGE, 1000);
-                                tworld.playSound(target.getLocation(), Sound.LEVEL_UP, 100f, 100f);
-                                world.playSound(player.getLocation(), Sound.LEVEL_UP, 100f, 100f);
+                                tworld.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
+                                world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
 								target.sendMessage(FeatherFlightPrefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.RESET + ChatColor.GREEN + " " + "turned on your flight" + ChatColor.RESET);
 								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "You turned on flight for" + " " + ChatColor.RESET + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET);
 								return true;
@@ -97,8 +92,8 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 								target.setAllowFlight(false);
 								target.setFlying(false);
                                 tworld.playEffect(target.getLocation(), Effect.EXPLOSION_LARGE, 1000);
-                                tworld.playSound(target.getLocation(), Sound.LEVEL_UP, 100f, 100f);
-                                world.playSound(player.getLocation(), Sound.LEVEL_UP, 100f, 100f);
+                                tworld.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
+                                world.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
 								target.sendMessage(FeatherFlightPrefix + ChatColor.GRAY + player.getDisplayName() + ChatColor.RESET + ChatColor.GREEN + " " + "turned off your flight" + ChatColor.RESET);
 								player.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "You turned off flight for" + " " + ChatColor.RESET + ChatColor.GRAY + target.getDisplayName() + ChatColor.RESET);
 								return true;
@@ -134,7 +129,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 							target.setAllowFlight(true);
 							target.setFlying(true);
                             tworld.playEffect(target.getLocation(), Effect.EXPLOSION_LARGE, 1000);
-                            tworld.playSound(target.getLocation(), Sound.LEVEL_UP, 100f, 100f);
+                            tworld.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
 							target.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Your flight has been turned on by" + ChatColor.RESET + " " + ChatColor.GRAY + "Console" + ChatColor.RESET);
 							sender.sendMessage(FeatherFlightConsolePrefix + "You turned on flight for" + " " + target.getDisplayName());
 							return true;
@@ -143,7 +138,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 							target.setAllowFlight(false);
 							target.setFlying(false);
                             tworld.playEffect(target.getLocation(), Effect.EXPLOSION_LARGE, 1000);
-                            tworld.playSound(target.getLocation(), Sound.LEVEL_UP, 100f, 100f);
+                            tworld.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100f, 100f);
 							target.sendMessage(FeatherFlightPrefix + ChatColor.GREEN + "Your flight has been turned off by" + ChatColor.RESET + " " + ChatColor.GRAY + "Console" + ChatColor.RESET);
 							sender.sendMessage(FeatherFlightConsolePrefix + "You turned off flight for" + " " + target.getDisplayName());
 							return true;
@@ -157,6 +152,7 @@ public class FeatherFlight extends JavaPlugin implements Listener{
 		}
 		return false;
 	}
+
 	@EventHandler
 	public void onLogin(PlayerJoinEvent e){
 		Player player = e.getPlayer();
