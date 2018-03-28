@@ -1,10 +1,3 @@
 # FeatherFlight
 
-FeatherFlight aims to improve default flight plugins.
-
-The development branch is where new implementations will be commited and tested, therefore i do not recommend using the development version.
-Use the master branch for a stable release.
-
-FeatherFlight plugin by Joris
-
-Currently maintained by Pixel
+FeatherFlight aims to improve default flight plugins but is just a simple plugin allowing for flight in a pinch for now.
